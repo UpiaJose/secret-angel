@@ -16,12 +16,26 @@ export class SecretAngelComponent implements OnInit {
   codeSecret: string = '';
   myNameAngel: string = '';
 
-  constructor() {}
+  constructor(private secretAngel: SecretAngelService) {}
 
   ngOnInit() {
-    this.angels = db;    
-    console.log(this.angels);
-    
+    this.getAngels();
+  }
+
+  getAngels(){
+    this.secretAngel.getSecrectAngel().subscribe((dbAngels: Angel[]) => {
+      this.angels = dbAngels;
+      console.log("Codigos Restantes:");
+      this.angels.forEach((angel, index) => {
+        
+
+        if (angel.availability) {
+          console.log(`${index+1}: ${angel.code}`);
+        } else {
+          console.log(`${index+1}: `);
+        }
+      });
+    });
   }
 
   getMyAngelSecret() {
@@ -36,14 +50,16 @@ export class SecretAngelComponent implements OnInit {
         });
         return;
       } else if (angel && angel.availability) {
-        angel.availability = false;
-        this.codeSecret = '';
-        this.myNameAngel = '';
-        Swal.fire({
-          title: '¡Angelito encontrado!',
-          text: 'Tu Angelito es: ' + angel.nameReal,
-          icon: 'success',
-          confirmButtonText: 'Aceptar'
+        this.secretAngel.updateSecrectAngel(this.codeSecret).subscribe((angel: Angel) => {
+          this.getAngels();
+          this.codeSecret = '';
+          this.myNameAngel = '';
+          Swal.fire({
+            title: '¡Angelito encontrado!',
+            text: 'Tu Angelito es: ' + angel.nameReal,
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
         });
         return;   
       } else {
@@ -55,8 +71,6 @@ export class SecretAngelComponent implements OnInit {
         });
       }
     }    
-    console.log(this.angels);
-    
   }
 
 
@@ -110,7 +124,7 @@ export class SecretAngelComponent implements OnInit {
         confirmButtonText: 'Aceptar'
       });
       return false;
-    } else if (this.angels.find(angel => angel.names.includes(this.myNameAngel) && angel.code === this.codeSecret) !== undefined) {
+    } else if (this.angels.find(angel => angel.names.toLowerCase() === this.myNameAngel.toLocaleLowerCase() && angel.code === this.codeSecret) !== undefined) {
       Swal.fire({
         title: '¡¡¡Oops!!!',
         text: 'Que tal si pruebas otro código 😉',

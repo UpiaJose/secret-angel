@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/secret-angel",
+            "outputPath": "dist/secret-angel/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -93,6 +93,60 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/secret-angel/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "secret-angel:build:development",
+              "serverTarget": "secret-angel:server:development"
+            },
+            "production": {
+              "browserTarget": "secret-angel:build:production",
+              "serverTarget": "secret-angel:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "secret-angel:build:production",
+              "serverTarget": "secret-angel:server:production"
+            },
+            "development": {
+              "browserTarget": "secret-angel:build:development",
+              "serverTarget": "secret-angel:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

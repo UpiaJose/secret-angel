@@ -11,14 +11,15 @@ export class SecretAngelService {
   constructor(private http: HttpClient) { }
 
   getSecrectAngel() {
-    return this.http.get<Angel[]>(this.data);
+    return this.http.get<Angel[]>("/api/angels");
   }
 
-  getJsonData() {
-    return this.http.get<any>(this.data);
-  }
+  // updateSecrectAngel(angel: Angel) {
+  //   return this.http.put<Angel>(this.data, angel);
+  // }
 
-  updateSecrectAngel(angel: Angel) {
-    return this.http.put<Angel>(this.data, angel);
+  updateSecrectAngel(code: string) {
+    const body = { code };
+    return this.http.put<Angel>("/api/angels", body);
   }
 }
