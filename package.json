@@ -4,13 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build-dev": "ng build",
     "watch": "ng build --wlatch --configuration development",
     "test": "ng test",
     "dev:ssr": "ng run secret-angel:serve-ssr",
     "serve:ssr": "node dist/secret-angel/server/main.js",
     "build:ssr": "ng build && ng run secret-angel:server",
-    "prerender": "ng run secret-angel:prerender"
+    "prerender": "ng run secret-angel:prerender",
+    "vercel-build": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
