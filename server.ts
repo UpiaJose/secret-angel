@@ -138,8 +138,6 @@ export function app(): express.Express {
     res.send(db);
   });
   server.put('/api/angels', (req, res) => {
-    console.log(req.body);
-    
     const angel = db.find(angel => angel.code === req.body.code);
     if (angel) {
       angel.availability = false;

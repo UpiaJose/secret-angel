@@ -18,17 +18,138 @@ export class SecretAngelComponent implements OnInit {
 
   constructor(private secretAngel: SecretAngelService) {}
 
+  generateRandomCode = (): string => {
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let randomCode = "";
+    
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomCode += characters.charAt(randomIndex);
+    }
+  
+    return randomCode;
+  };
+
   ngOnInit() {
     this.getAngels();
+  }
+  
+  async addAngels() {
+    const db: Angel[] = [
+      {
+        names: "Titi/Ñonga/Cristina",
+        nameReal: "Cristina/Titi",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Cristal/María/Maria/Stephanie/María Stephanie/Maria Stephanie",
+        nameReal: "Cristal",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Jhosmery",
+        nameReal: "Jhosmery",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Alex/Alejandrina",
+        nameReal: "Alex",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Shakespeare",
+        nameReal: "Shakespeare",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Mindalis/Mindalys/Mindy",
+        nameReal: "Mindalis",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Niña/Marícela/Marísela/Marisela/Maricela",
+        nameReal: "Marícela/Niña",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Miguel/Jose/José/Jose Miguel/José Miguel",
+        nameReal: "Miguel",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Erik/Eriberto",
+        nameReal: "Erik",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Jhoseimy",
+        nameReal: "Jhoseimy",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Jhojanmy",
+        nameReal: "Jhojanmy",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Eribel/Viki",
+        nameReal: "Eribel",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Lula",
+        nameReal: "Lula",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Marciana/Mama/La doña",
+        nameReal: "Marciana",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Enmanuel/Emmanuel/Manuel",
+        nameReal: "Emmanuel",
+        availability: true,
+        code: this.generateRandomCode()
+      },
+      {
+        names: "Crisay/Nana",
+        nameReal: "Crisay/Nana",
+        availability: true,
+        code: this.generateRandomCode()
+      }
+    ];
+    db.forEach(async (angel) => {
+      await this.secretAngel.addSecretAngel(angel);
+    });
   }
 
   getAngels(){
     this.secretAngel.getSecrectAngel().subscribe((dbAngels: Angel[]) => {
       this.angels = dbAngels;
+      console.log(this.angels);
+
+      if (this.angels.length === 0) { 
+        // await this.addAngels();  
+        console.log("No hay codigos en la base de datos");
+      }
+        
       console.log("Codigos Restantes:");
       this.angels.forEach((angel, index) => {
-        
-
         if (angel.availability) {
           console.log(`${index+1}: ${angel.code}`);
         } else {
@@ -50,7 +171,8 @@ export class SecretAngelComponent implements OnInit {
         });
         return;
       } else if (angel && angel.availability) {
-        this.secretAngel.updateSecrectAngel(this.codeSecret).subscribe((angel: Angel) => {
+        angel.availability = false;
+        this.secretAngel.updateSecrectAngel(angel).then(() => {
           this.getAngels();
           this.codeSecret = '';
           this.myNameAngel = '';
