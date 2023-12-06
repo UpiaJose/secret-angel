@@ -37,7 +37,7 @@ export function app(): express.Express {
     {
       names: "Jhoseimy",
       nameReal: "Jhoseimy",
-      availability: false,
+      availability: true,
       code: generateRandomCode()
     },
     {
@@ -49,7 +49,7 @@ export function app(): express.Express {
     {
       names: "Alex/Alejandrina",
       nameReal: "Alex",
-      availability: false,
+      availability: true,
       code: generateRandomCode()
     },
     {
